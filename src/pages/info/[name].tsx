@@ -3,6 +3,7 @@ import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Head from 'next/head';
+import Image from 'next/image';
 import useSWR from 'swr';
 import Loader from 'react-loader-spinner';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
@@ -88,7 +89,12 @@ const CountryInfo = ({
               <>
                 <Row>
                   <div className="image-wrapper">
-                    <img src={country.flag} alt={country.name} />
+                    <Image
+                      src={country.flag}
+                      alt={country.name}
+                      width={440}
+                      height={293}
+                    />
                   </div>
 
                   <Info>
