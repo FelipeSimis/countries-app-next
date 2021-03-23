@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { GetServerSideProps } from 'next';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Head from 'next/head';
@@ -223,8 +223,21 @@ const CountryInfo = ({
 
 export default CountryInfo;
 
-export const getServerSideProps: GetServerSideProps = async ctx => {
-  const { name } = ctx.query;
+export const getStaticPaths: GetStaticPaths = async () => {
+  const countries = await fetcher('/all');
+
+  const paths = countries.map(country => {
+    return { params: { name: country.alpha3Code } };
+  });
+
+  return {
+    paths,
+    fallback: false,
+  };
+};
+
+export const getStaticProps: GetStaticProps = async ctx => {
+  const { name } = ctx.params;
 
   const country: Country = await fetcher(`/alpha/${name}`);
 
@@ -232,5 +245,6 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
     props: {
       country,
     },
+    revalidate: 60,
   };
 };

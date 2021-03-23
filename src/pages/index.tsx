@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next';
+import { GetStaticProps } from 'next';
 import Head from 'next/head';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 
@@ -30,12 +30,13 @@ const Home = ({ theme, toggleTheme, countries }: Props): JSX.Element => {
 
 export default Home;
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const countries = await fetcher('/all');
 
   return {
     props: {
       countries,
     },
+    revalidate: 60,
   };
 };
