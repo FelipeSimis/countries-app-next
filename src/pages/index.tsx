@@ -1,6 +1,5 @@
 import { GetStaticProps } from 'next';
 import Head from 'next/head';
-import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 
 import { CountriesProvider, Country } from '../hooks/countries';
 

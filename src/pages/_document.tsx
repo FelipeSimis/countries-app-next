@@ -33,6 +33,10 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
+          <meta
+            name="description"
+            content="A simple application that contains basic information from all countries in the world"
+          />
           <link rel="icon" href="/favicon.ico" />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link

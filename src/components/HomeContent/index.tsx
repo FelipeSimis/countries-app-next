@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
-import Loader from 'react-loader-spinner';
 
 import { useCountry } from '../../hooks/countries';
 
@@ -74,14 +73,7 @@ const HomeContent = (): JSX.Element => {
         </Row>
 
         <CountriesContainer>
-          {loading ? (
-            <Loader
-              type="ThreeDots"
-              color="var(--elements)"
-              height={80}
-              width={80}
-            />
-          ) : (
+          {!loading &&
             filteredCountries.map(country => (
               <CountryBox
                 key={country.name}
@@ -92,8 +84,7 @@ const HomeContent = (): JSX.Element => {
                 capital={country.capital}
                 href={`/info/${country.alpha3Code}`}
               />
-            ))
-          )}
+            ))}
         </CountriesContainer>
       </Wrapper>
     </Container>

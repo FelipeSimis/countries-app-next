@@ -5,8 +5,6 @@ import Link from 'next/link';
 import Head from 'next/head';
 import Image from 'next/image';
 import useSWR from 'swr';
-import Loader from 'react-loader-spinner';
-import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import 'leaflet/dist/leaflet.css';
 
 import ArrowLeft from '../../assets/icons/arrow-left.svg';
@@ -78,14 +76,7 @@ const CountryInfo = ({
           </GoBackContainer>
 
           <CountryContainer>
-            {isLoading ? (
-              <Loader
-                type="ThreeDots"
-                color="var(--elements)"
-                height={80}
-                width={80}
-              />
-            ) : (
+            {!isLoading && (
               <>
                 <Row>
                   <div className="image-wrapper">
