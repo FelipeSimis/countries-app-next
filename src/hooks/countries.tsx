@@ -54,7 +54,7 @@ const useCountriesList = (countries?: Country[]) => {
   const { data, error } = useSWR(`/all`, fetcher, { initialData: countries });
 
   return {
-    countries: data,
+    countries: data as Country[],
     isLoading: !error && !data,
     isError: error,
   };

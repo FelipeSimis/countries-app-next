@@ -49,7 +49,6 @@ const Input = ({ name, ...rest }: Props): JSX.Element => {
         defaultValue={defaultValue}
         onFocus={handleInputFocus}
         onBlur={handleInputBlur}
-        // eslint-disable-next-line react/jsx-props-no-spreading
         {...rest}
       />
 

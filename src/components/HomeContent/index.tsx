@@ -34,10 +34,10 @@ const HomeContent = (): JSX.Element => {
     async ({ country }, { reset }) => {
       if (country === '') return;
 
-      formRef.current.setErrors({});
+      formRef.current?.setErrors({});
 
       await handleSearchByCountry(country).catch(() => {
-        formRef.current.setFieldError('country', 'Country not found');
+        formRef.current?.setFieldError('country', 'Country not found');
       });
 
       reset();

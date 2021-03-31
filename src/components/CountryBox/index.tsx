@@ -26,7 +26,7 @@ const CountryBox: NextPage<CountryProps> = ({
     <Link href={href} passHref>
       <Container>
         <div className="image-container">
-          <Image src={flag} alt={name} width="auto" height="auto" />
+          <Image src={flag} alt={name} width={280} height={213} />
         </div>
 
         <Info>
