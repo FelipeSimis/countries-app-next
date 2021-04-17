@@ -41,5 +41,5 @@ Access [MapBox](https://account.mapbox.com/) and sign in, after that click in "C
   NEXT_PUBLIC_MAPBOX_TOKEN={YOUR API KEY GOES HERE, WITHOUT THE BRACKETS}
 
   # To finish, run the project
-  $ yarn start
+  $ yarn dev
 ```
