@@ -38,12 +38,7 @@ export default class MyDocument extends Document {
             content="A simple application that contains basic information from all countries in the world"
           />
           <link rel="icon" href="/favicon.ico" />
-          <link
-            rel="preconnect"
-            href="https://fonts.gstatic.com"
-            as="style"
-            onLoad={() => "this.rel='stylesheet'"}
-          />
+          <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link
             href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;800&display=swap"
             rel="stylesheet"

@@ -70,7 +70,6 @@ export const Row = styled.div`
 
     img {
       width: 100%;
-      object-fit: cover;
       flex-shrink: 0;
     }
   }
@@ -113,6 +112,7 @@ export const Info = styled.div`
       span {
         font-size: inherit;
         font-weight: 300;
+        color: #bebebe;
       }
     }
 

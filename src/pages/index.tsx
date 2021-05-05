@@ -36,6 +36,6 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       countries,
     },
-    revalidate: 60,
+    revalidate: 60 * 60 * 24,
   };
 };

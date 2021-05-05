@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Head from 'next/head';
 import Image from 'next/image';
-import useSWR from 'swr';
 import 'leaflet/dist/leaflet.css';
 
 import ArrowLeft from '../../assets/icons/arrow-left.svg';
@@ -33,29 +32,11 @@ interface Props {
 
 const fetcher = (url: string) => api.get(url).then(res => res.data);
 
-const useCountry = (country: Country) => {
-  const { data, error } = useSWR(`/alpha/${country.alpha3Code}`, fetcher, {
-    initialData: country,
-  });
-
-  return {
-    country: data as Country,
-    isLoading: !error && !data,
-    isError: error,
-  };
-};
-
 const Map = dynamic(() => import('../../components/Map'), {
   ssr: false,
 });
 
-const CountryInfo = ({
-  country: data,
-  theme,
-  toggleTheme,
-}: Props): JSX.Element => {
-  const { country, isLoading } = useCountry(data);
-
+const CountryInfo = ({ country, theme, toggleTheme }: Props): JSX.Element => {
   return (
     <>
       <Head>
@@ -76,135 +57,113 @@ const CountryInfo = ({
           </GoBackContainer>
 
           <CountryContainer>
-            {!isLoading && (
-              <>
-                <Row>
-                  <div className="image-wrapper">
-                    <Image
-                      src={country.flag}
-                      alt={country.name}
-                      width={440}
-                      height={293}
-                    />
-                  </div>
+            <>
+              <Row>
+                <div className="image-wrapper">
+                  <Image
+                    src={country.flag}
+                    alt={country.name}
+                    width={440}
+                    height={293}
+                    objectFit="cover"
+                    priority
+                  />
+                </div>
 
-                  <Info>
-                    <h5>{country.name}</h5>
+                <Info>
+                  <h5>{country.name}</h5>
 
-                    <div className="wrapper-info">
-                      <div className="first-section">
-                        <p>
-                          Native Name: <span>{country.nativeName}</span>
-                        </p>
+                  <div className="wrapper-info">
+                    <div className="first-section">
+                      <p>
+                        Native Name: <span>{country.nativeName}</span>
+                      </p>
 
-                        <p>
-                          Population:{' '}
-                          <span>
-                            {country.population?.toLocaleString(undefined, {
-                              minimumFractionDigits: 3,
-                              maximumSignificantDigits: 2,
-                            })}
-                          </span>
-                        </p>
+                      <p>
+                        Population: <span>{country.population}</span>
+                      </p>
 
+                      {country.region !== '' && (
                         <p>
                           Region: <span>{country.region}</span>
                         </p>
+                      )}
 
-                        {country.subregion && (
-                          <p>
-                            Sub Region: <span>{country.subregion}</span>
-                          </p>
-                        )}
-
-                        {country.capital && (
-                          <p>
-                            Capital: <span>{country.capital}</span>
-                          </p>
-                        )}
-
-                        {country.demonym && (
-                          <p>
-                            Demonym: <span>{country.demonym}</span>
-                          </p>
-                        )}
-                      </div>
-
-                      <div className="second-section">
+                      {country.subregion && (
                         <p>
-                          Top Level Domain:{' '}
-                          <span>{country.topLevelDomain}</span>
+                          Sub Region: <span>{country.subregion}</span>
                         </p>
+                      )}
 
-                        {country.latlng.length !== 0 && (
-                          <p>
-                            Latitude and Longitude:{' '}
-                            <span>
-                              {`${country.latlng[0].toFixed(
-                                2
-                              )}, ${country.latlng[1].toFixed(2)}`}
-                            </span>
-                          </p>
-                        )}
-
-                        {country.area !== null && (
-                          <p>
-                            Area:{' '}
-                            <span>
-                              {country.area?.toLocaleString(undefined, {
-                                minimumFractionDigits: 3,
-                                maximumSignificantDigits: 2,
-                              })}{' '}
-                              km²
-                            </span>
-                          </p>
-                        )}
-
+                      {country.capital && (
                         <p>
-                          Currencies:{' '}
-                          <span>
-                            {country.currencies?.map(currency => currency.name)}
-                          </span>
+                          Capital: <span>{country.capital}</span>
                         </p>
+                      )}
 
-                        {country.cioc && (
-                          <p>
-                            IOC: <span>{country.cioc}</span>
-                          </p>
-                        )}
-
+                      {country.demonym && (
                         <p>
-                          Languages:{' '}
-                          {country.languages?.map((language, index) => {
-                            return index === 0 ? (
-                              <span key={language.name}>{language.name}</span>
-                            ) : (
-                              <span key={language.name}>, {language.name}</span>
-                            );
-                          })}
+                          Demonym: <span>{country.demonym}</span>
                         </p>
-                      </div>
+                      )}
                     </div>
 
-                    {country.borders?.length !== 0 && (
-                      <BorderCountries>
-                        <span>Border Countries: </span>
+                    <div className="second-section">
+                      <p>
+                        Top Level Domain: <span>{country.topLevelDomain}</span>
+                      </p>
 
-                        <div className="border-countries-container">
-                          {country.borders?.map(border => (
-                            <Link key={border} href={`/info/${border}`}>
-                              <a>{border}</a>
-                            </Link>
-                          ))}
-                        </div>
-                      </BorderCountries>
-                    )}
-                  </Info>
-                </Row>
+                      {country.latlng?.length !== 0 && (
+                        <p>
+                          Latitude and Longitude:{' '}
+                          <span>
+                            {`${country.latlng[0].toFixed(
+                              2
+                            )}, ${country.latlng[1].toFixed(2)}`}
+                          </span>
+                        </p>
+                      )}
 
-                {country.latlng.length !== 0 && <Map country={country} />}
-              </>
-            )}
+                      {!!country.area && (
+                        <p>
+                          Area: <span>{country.area} km²</span>
+                        </p>
+                      )}
+
+                      <p>
+                        Currencies: <span>{country?.currencies}</span>
+                      </p>
+
+                      {country.cioc && (
+                        <p>
+                          IOC: <span>{country.cioc}</span>
+                        </p>
+                      )}
+
+                      <p>
+                        Languages: <span>{country?.languages}</span>
+                      </p>
+                    </div>
+                  </div>
+
+                  {country.borders?.length !== 0 && (
+                    <BorderCountries>
+                      <span>Border Countries: </span>
+
+                      <div className="border-countries-container">
+                        {country.borders?.map(border => (
+                          <Link key={border} href={`/info/${border}`}>
+                            <a>{border}</a>
+                          </Link>
+                        ))}
+                      </div>
+                    </BorderCountries>
+                  )}
+                </Info>
+              </Row>
+
+              {country.latlng?.length !== 0 && <Map country={country} />}
+            </>
           </CountryContainer>
         </Wrapper>
       </Container>
@@ -223,19 +182,37 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths,
-    fallback: false,
+    fallback: 'blocking',
   };
 };
 
 export const getStaticProps: GetStaticProps = async ctx => {
   const { name } = ctx.params;
 
-  const country: Country = await fetcher(`/alpha/${name}`);
+  const countryData: Country = await fetcher(`/alpha/${name}`);
+
+  const country = {
+    ...countryData,
+    population: countryData.population.toLocaleString(undefined, {
+      minimumFractionDigits: 3,
+      maximumSignificantDigits: 2,
+    }),
+    area:
+      countryData.area !== null &&
+      countryData.area.toLocaleString(undefined, {
+        minimumFractionDigits: 3,
+        maximumSignificantDigits: 2,
+      }),
+    currencies: countryData.currencies
+      ?.map(currency => currency.name)
+      .join(', '),
+    languages: countryData.languages?.map(language => language.name).join(', '),
+  };
 
   return {
     props: {
       country,
     },
-    revalidate: 60,
+    revalidate: 60 * 60 * 24,
   };
 };
